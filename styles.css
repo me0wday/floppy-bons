@@ -1,0 +1,707 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(to bottom, #ff9966, #ff5e62);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+/* Game Container */
+.game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #87CEEB, #e0f7fa);
+    overflow: hidden;
+}
+
+/* Environment Elements */
+.ceiling {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 5vh;
+    background-color: #4682B4;
+    z-index: 2;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.ceiling::after {
+    /* content: "⚠️ DANGER ZONE ⚠️"; */
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    bottom: -20px;
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 0 3px #000;
+    font-weight: bold;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15vh;
+    background: linear-gradient(to bottom, #8B4513, #A0522D);
+    z-index: 2;
+}
+
+.grass {
+    position: absolute;
+    bottom: 15vh;
+    width: 100%;
+    height: 2vh;
+    background: linear-gradient(to bottom, #7CFC00, #228B22);
+    z-index: 2;
+}
+
+.sun {
+    position: absolute;
+    top: 5vh;
+    right: 5vh;
+    width: 10vh;
+    height: 10vh;
+    background: radial-gradient(circle, #FFD700, #FFA500);
+    border-radius: 50%;
+    box-shadow: 0 0 30px #FFD700;
+}
+
+/* Character */
+.character {
+    position: absolute;
+    width: 12vh;
+    height: 10vh;
+    left: 15%;
+    bottom: 20vh;
+    z-index: 3;
+    transition: transform 0.1s;
+}
+
+.character svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Obstacles */
+.obstacle {
+    position: absolute;
+    width: 10vh;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cactus {
+    background-color: #2E8B57;
+    border-radius: 5px;
+    position: relative;
+    width: 6vh;
+}
+
+.cactus::before, .cactus::after {
+    content: '';
+    position: absolute;
+    background-color: #2E8B57;
+    border-radius: 5px;
+}
+
+.cactus::before {
+    width: 3vh;
+    height: 4vh;
+    top: 25%;
+    left: -2.5vh;
+}
+
+.cactus::after {
+    width: 3vh;
+    height: 4vh;
+    top: 50%;
+    right: -2.5vh;
+}
+
+/* Clouds */
+.cloud {
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+/* Birds (collectibles) */
+.bird {
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+    width: 4vw;
+    height: 4vw;
+}
+
+.bird svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Bird collection effect */
+.bird.collected {
+    animation: bird-collect 0.5s ease-out forwards;
+}
+
+@keyframes bird-collect {
+    0% { 
+        transform: scale(1) translateY(0px);
+        opacity: 1;
+    }
+    50% { 
+        transform: scale(1.5) translateY(-20px);
+        opacity: 0.8;
+    }
+    100% { 
+        transform: scale(0) translateY(-40px);
+        opacity: 0;
+    }
+}
+
+/* UI Elements */
+.score-display {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: min(5vw, 24px);
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 0 #000;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.high-score {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    font-size: min(4vw, 18px);
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 2px 2px 0 #000;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.level-indicator {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    font-size: min(4vw, 18px);
+    font-weight: bold;
+    color: #FF5722;
+    text-shadow: 1px 1px 0 #000;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+.level-up-indicator {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: min(3vw, 14px);
+    color: #4CAF50;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+    opacity: 0;
+    transform: translateY(0px);
+    transition: all 0.4s ease-out;
+    pointer-events: none;
+}
+
+.level-up-indicator.animate {
+    opacity: 1;
+    transform: translateY(-20px);
+}
+
+.bird-collection-indicator {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: min(3vw, 14px);
+    color: #FFD700;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+    opacity: 0;
+    transform: translateY(0px);
+    transition: all 0.4s ease-out;
+    pointer-events: none;
+}
+
+.bird-collection-indicator.animate {
+    opacity: 1;
+    transform: translateY(-20px);
+}
+
+.level-up-notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: min(8vw, 36px);
+    font-weight: bold;
+    color: #FF5722;
+    text-shadow: 2px 2px 0 #000;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px 25px;
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+.death-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.3);
+    z-index: 8;
+    display: none;
+    pointer-events: none;
+}
+
+/* Config Button */
+.config-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 15;
+}
+
+.config-button svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
+/* Game Screens */
+.start-screen, .game-over {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.game-over {
+    display: none;
+}
+
+h1 {
+    font-family: 'Bangers', cursive;
+    font-size: min(8vw, 48px);
+    margin-bottom: 20px;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #000;
+}
+
+.instructions {
+    margin-top: 20px;
+    font-size: min(4vw, 18px);
+    max-width: 80%;
+}
+
+.game-config-display {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin: 15px 0;
+    font-size: 14px;
+    text-align: left;
+    max-width: 80%;
+}
+
+.game-config-display h3 {
+    color: #FFD700;
+    margin-bottom: 8px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.game-config-display p {
+    margin: 5px 0;
+    color: #fff;
+}
+
+/* Buttons */
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: min(4vw, 16px);
+    margin: 10px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 5px #388E3C;
+    transition: all 0.3s;
+}
+
+button:hover {
+    background-color: #388E3C;
+    transform: translateY(2px);
+    box-shadow: 0 3px #2E7D32;
+}
+
+button:active {
+    transform: translateY(5px);
+    box-shadow: none;
+}
+
+/* Config Modal */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 15;
+    display: none;
+}
+
+.config-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 20;
+    color: #333;
+    display: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.config-modal h2 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.config-modal h3 {
+    color: #2196F3;
+    margin: 20px 0 10px;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.config-modal label {
+    display: block;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.config-modal textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: monospace;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+/* Config Tabs */
+.config-tabs {
+    display: flex;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.config-tab {
+    padding: 8px 15px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.config-tab.active {
+    background-color: #2196F3;
+    color: white;
+    border-color: #2196F3;
+}
+
+.config-section {
+    display: none;
+}
+
+.config-section.active {
+    display: block;
+}
+
+/* Config Options */
+.config-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.config-option {
+    flex: 1;
+    min-width: 120px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Form Controls */
+.slider-container {
+    margin: 15px 0;
+}
+
+.slider {
+    width: 100%;
+    height: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #ddd;
+    outline: none;
+    border-radius: 5px;
+    margin: 8px 0;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2196F3;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2196F3;
+    cursor: pointer;
+}
+
+.number-input {
+    width: 70px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.value-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+/* SVG Preview */
+.svg-preview-container {
+    position: relative;
+    width: 150px;
+    height: 120px;
+    margin: 15px auto;
+    border: 2px dashed #ccc;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.svg-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.svg-preview svg {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.rotation-control {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #2196F3;
+    border-radius: 50%;
+    bottom: 5px;
+    right: 5px;
+    cursor: grab;
+    z-index: 2;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.rotation-control:active {
+    cursor: grabbing;
+}
+
+.rotation-line {
+    position: absolute;
+    width: 2px;
+    height: 30px;
+    background-color: #2196F3;
+    bottom: 15px;
+    right: 14px;
+    transform-origin: bottom center;
+    z-index: 1;
+}
+
+.rotation-value {
+    position: absolute;
+    bottom: 30px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    display: none;
+}
+
+/* Modal Buttons */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.config-modal button {
+    padding: 10px 20px;
+    margin: 0 5px;
+}
+
+.close-button {
+    background-color: #f44336 !important;
+    box-shadow: 0 5px #d32f2f !important;
+}
+
+.close-button:hover {
+    background-color: #d32f2f !important;
+    box-shadow: 0 3px #b71c1c !important;
+}
+
+.save-button {
+    background-color: #2196F3 !important;
+    box-shadow: 0 5px #0d47a1 !important;
+}
+
+.save-button:hover {
+    background-color: #0d47a1 !important;
+    box-shadow: 0 3px #082b5c !important;
+}
+
+/* Responsive Design */
+@media (orientation: portrait) {
+    .character {
+        width: 12vw;
+        height: 10vw;
+    }
+    
+    .obstacle {
+        width: 10vw;
+    }
+    
+    .cactus {
+        width: 6vw;
+    }
+    
+    .cactus::before {
+        width: 3vw;
+        height: 4vw;
+        left: -2.5vw;
+    }
+    
+    .cactus::after {
+        width: 3vw;
+        height: 4vw;
+        right: -2.5vw;
+    }
+    
+    .sun {
+        width: 10vw;
+        height: 10vw;
+    }
+    
+    /* Bird responsive styles */
+    .bird {
+        width: 4vw;
+        height: 4vw;
+    }
+} 
